@@ -36,6 +36,8 @@ export class LineChartComponent implements OnInit {
         this.initAxis();
         this.drawAxis();
         this.drawLine();
+        
+
     }
 
     private initSvg() {
@@ -49,6 +51,8 @@ export class LineChartComponent implements OnInit {
         this.y = d3Scale.scaleLinear().range([this.height, 0]);
         this.x.domain(d3Array.extent(STOCKS, (d) => d.date ));
         this.y.domain(d3Array.extent(STOCKS, (d) => d.value ));
+
+        
     }
 
     private drawAxis() {
@@ -68,6 +72,7 @@ export class LineChartComponent implements OnInit {
             .attr('dy', '.71em')
             .style('text-anchor', 'end')
             .text('Price ($)');
+
     }
 
     private drawLine() {
@@ -75,10 +80,25 @@ export class LineChartComponent implements OnInit {
             .x( (d: any) => this.x(d.date) )
             .y( (d: any) => this.y(d.value) );
 
-        this.svg.append('path')
+        this.svg.append('svg:path')
             .datum(STOCKS)
             .attr('class', 'line')
-            .attr('d', this.line);
+            .attr('d', this.line).style('stroke',(d:any)=>{
+                console.log(d);
+                
+                for(let i=0;i<d.length;i++){
+                    if(STOCKS[i].value!=d.value){
+                        return 'red';
+                    }
+                    else if(STOCKS[i].value==d.value){
+                        return 'green';
+                    }
+                }
+            } );
+      
+
     }
+
+        
 
 }
